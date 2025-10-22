@@ -3,236 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Ad Concepts Canvas</title>
+    <title>Media Previewer</title>
+    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .ad-preview { aspect-ratio: 1 / 1; }
-        .ad-preview.stories { aspect-ratio: 9 / 16; }
-        .shadow-text { text-shadow: 2px 2px 8px rgba(0,0,0,0.7); }
+        /* This ensures the image or video fills the aspect ratio box */
+        #media-wrapper img,
+        #media-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.5rem; /* rounded-lg */
+        }
     </style>
 </head>
-<body class="bg-gray-200 p-4 md:p-8">
-    <div class="max-w-7xl mx-auto">
+<body class="bg-gray-900 text-gray-100 min-h-screen flex items-center justify-center font-sans p-4">
+
+    <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-md">
         
-        <div class="mb-8 bg-white p-6 md:p-8 rounded-xl shadow-lg">
-            <h1 class="text-3xl font-bold text-gray-900 mb-6">Campaign Analysis & New Ad Concepts</h1>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-gray-50 rounded-lg p-6">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4">Best Performing Copy (by CTR & CPC)</h2>
-                    <p class="text-sm text-gray-500 mb-3">(Note: Conversion data was not broken down by copy, so CTR and CPC are our best metrics for engagement.)</p>
-                    
-                    <h3 class="font-semibold text-gray-900">Best Headlines:</h3>
-                    <ul class="list-disc list-outside space-y-2 text-gray-700 ml-5 mb-4">
-                        <li><strong class="text-gray-900">"PLAN. TRAIN. SUCCEED."</strong> (4.95% CTR, 1.56 NOK CPC)</li>
-                        <li><strong class="text-gray-900">"Try free for 14 days"</strong> (4.75% CTR, 1.71 NOK CPC)</li>
-                    </ul>
-                    
-                    <h3 class="font-semibold text-gray-900">Best Primary Text:</h3>
-                    <ul class="list-disc list-outside space-y-2 text-gray-700 ml-5">
-                        <li><strong class="text-gray-900">"Get access to our coaching platform for Handball w..."</strong> (5.12% CTR, 1.76 NOK CPC)</li>
-                        <li><strong class="text-gray-900">"The video exercises the pros use, now available fo..."</strong> (4.25% CTR, 2.10 NOK CPC)</li>
-                    </ul>
-                </div>
+        <h1 class="text-2xl font-bold text-center mb-6 text-white">Media Preview Tool</h1>
 
-                <div class="bg-gray-50 rounded-lg p-6">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4">Strategy for New Ads</h2>
-                    <p class="text-gray-700 space-y-3">
-                        The data shows our converting audience is **Males 35-54**. This is the "parent coach" or "dad coach" demographic.
-                    </p>
-                    <p class="text-gray-700 mt-3 space-y-3">
-                        Our winning ads focused on platform features. These new concepts are designed to test completely new emotional angles and value propositions that will resonate directly with this specific audience, while following Atle's feedback (clear hook, bullets, CTA button).
-                    </p>
-                </div>
+        <!-- Input for the link -->
+        <div class="mb-4">
+            <label for="link-input" class="block text-sm font-medium text-gray-300 mb-2">Image or Video Link</label>
+            <input type="text" id="link-input" placeholder="Paste a link (Google Drive, imgur, etc.)" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+
+        <!-- Aspect Ratio Buttons -->
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-300 mb-2">Select Aspect Ratio</label>
+            <div class="flex gap-4">
+                <button id="btn-4-5" class="aspect-btn flex-1 px-4 py-3 rounded-lg font-medium transition-colors">4:5</button>
+                <button id="btn-9-16" class="aspect-btn flex-1 px-4 py-3 rounded-lg font-medium transition-colors">9:16</button>
             </div>
         </div>
 
-        <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">New Ad Concept Canvas</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
-                <h3 class="text-xl font-bold mb-4">Ad Controls</h3>
-                
-                <div class="mb-4">
-                    <label for="conceptSelect" class="block text-sm font-medium text-gray-700 mb-1">Load New Concept:</label>
-                    <select id="conceptSelect" class="w-full p-2 border border-gray-300 rounded-md shadow-sm">
-                        <option value="0">1. The "Dad Coach" Persona</option>
-                        <option value="1">2. The "Specific Solution" (Planning)</option>
-                        <option value="2">3. The "Emotional Payoff" (Player-Focused)</option>
-                    </select>
-                </div>
+        <!-- Preview Button -->
+        <button id="preview-button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors shadow-lg">
+            Generate Preview
+        </button>
 
-                <div class="mb-4">
-                    <label for="aspectRatio" class="block text-sm font-medium text-gray-700 mb-1">Aspect Ratio:</label>
-                    <select id="aspectRatio" class="w-full p-2 border border-gray-300 rounded-md shadow-sm">
-                        <option value="square">1:1 (Feed/Square)</option>
-                        <option value="stories">9:16 (Stories/Reels)</option>
-                    </select>
-                </div>
-
-                <div class="mb-4">
-                    <label for="imageUrl" class="block text-sm font-medium text-gray-700 mb-1">Image URL:</label>
-                    <input type="text" id="imageUrl" class="w-full p-2 border border-gray-300 rounded-md shadow-sm" value="https://placehold.co/1080x1080/334155/E2E8F0?text=Your+Image+Here">
-                </div>
-
-                <div class="mb-4">
-                    <label for="logoUrl" class="block text-sm font-medium text-gray-700 mb-1">Logo URL:</label>
-                    <input type="text" id="logoUrl" class="w-full p-2 border border-gray-300 rounded-md shadow-sm" value="https://placehold.co/400x100/ffffff/334155?text=LOGO">
-                </div>
-
-                <div class="mb-4">
-                    <label for="headline" class="block text-sm font-medium text-gray-700 mb-1">Headline (H1):</label>
-                    <textarea id="headline" rows="3" class="w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
-                </div>
-
-                <div class="mb-4">
-                    <label for="bullets" class="block text-sm font-medium text-gray-700 mb-1">Value Props (Use • for bullets):</label>
-                    <textarea id="bullets" rows="4" class="w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
-                </div>
-
-                <div class="mb-4">
-                    <label for="cta" class="block text-sm font-medium text-gray-700 mb-1">CTA Button Text:</label>
-                    <input type="text" id="cta" class="w-full p-2 border border-gray-300 rounded-md shadow-sm">
-                </div>
-                
-                <button id="downloadBtn" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200">
-                    Download as PNG
-                </button>
-            </div>
-
-            <div class="lg:col-span-2">
-                <div id="adPreviewContainer" class="flex items-center justify-center">
-                    <div id="adPreview" class="ad-preview w-full max-w-lg bg-gray-700 rounded-lg overflow-hidden shadow-2xl relative">
-                        <img id="previewBgImage" src="https://placehold.co/1080x1080/334155/E2E8F0?text=Your+Image+Here" class="absolute inset-0 w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-                        
-                        <div class="absolute inset-0 p-6 flex flex-col justify-between text-white">
-                            <div class="flex-shrink-0">
-                                <img id="previewLogo" src="https://placehold.co/400x100/ffffff/334155?text=LOGO" class="h-8 md:h-10 w-auto bg-white p-1 rounded-sm">
-                            </div>
-                            
-                            <div class="flex-grow flex flex-col items-center justify-center text-center p-4">
-                                <h1 id="previewHeadline" class="text-3xl md:text-5xl font-bold leading-tight shadow-text"></h1>
-                                
-                                <div id="previewBullets" class="text-lg md:text-2xl mt-4 font-medium leading-normal whitespace-pre-line shadow-text"></div>
-                            </div>
-                            
-                            <div class="flex-shrink-0 w-full">
-                                <div id="previewCta" class="bg-white text-gray-900 font-bold text-lg md:text-2xl text-center p-3 md:p-4 rounded-md w-full max-w-md mx-auto shadow-lg">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- Preview Area -->
+        <div id="preview-container" class="mt-6 border-2 border-gray-700 border-dashed rounded-lg p-4 min-h-[200px] flex items-center justify-center">
+            <div id="media-wrapper" class="bg-gray-700 rounded-lg w-full transition-all duration-300">
+                <p id="placeholder-text" class="text-gray-400 text-center p-10">Your preview will appear here</p>
             </div>
         </div>
+
     </div>
 
     <script>
-        // DOM Elements
-        const conceptSelect = document.getElementById('conceptSelect');
-        const aspectRatio = document.getElementById('aspectRatio');
-        const imageUrl = document.getElementById('imageUrl');
-        const logoUrl = document.getElementById('logoUrl');
-        const headline = document.getElementById('headline');
-        const bullets = document.getElementById('bullets');
-        const cta = document.getElementById('cta');
-        const downloadBtn = document.getElementById('downloadBtn');
-
-        const adPreview = document.getElementById('adPreview');
-        const previewBgImage = document.getElementById('previewBgImage');
-        const previewLogo = document.getElementById('previewLogo');
-        const previewHeadline = document.getElementById('previewHeadline');
-        const previewBullets = document.getElementById('previewBullets');
-        const previewCta = document.getElementById('previewCta');
-
-        // Ad Concept Data
-        const adConcepts = [
-            {
-                name: "The 'Dad Coach' Persona",
-                image: "https://placehold.co/1080x1080/6E6B5E/FFFFFF?text=Father+%26+Kid+Playing",
-                logo: "https://placehold.co/400x100/ffffff/334155?text=LOGO",
-                headline: "Coaching your kid's team?",
-                bullets: "• Make every practice fun & effective\n• 700+ age-specific video exercises\n• Be the hero, not just the coach",
-                cta: "Try free for 14 days"
-            },
-            {
-                name: "The 'Specific Solution' (Planning)",
-                image: "https://placehold.co/1080x1080/4A5568/FFFFFF?text=App+Planner+UI",
-                logo: "https://placehold.co/400x100/ffffff/334155?text=LOGO",
-                headline: "Your entire season, planned in 10 minutes.",
-                bullets: "• 700+ video exercises\n• Ready-made training plans\n• Stop searching, start coaching",
-                cta: "Try free for 14 days"
-            },
-            {
-                name: "The 'Emotional Payoff' (Player-Focused)",
-                image: "https://placehold.co/1080x1080/9C7A60/FFFFFF?text=Kids+Laughing+at+Practice",
-                logo: "https://placehold.co/400x100/ffffff/334155?text=LOGO",
-                headline: "Run practices your players will actually love.",
-                bullets: "• 700+ fun, engaging video exercises\n• For players age 6-16\n• Build skills and confidence",
-                cta: "Try free for 14 days. Sign up now!"
-            }
-        ];
-
-        // Function to load a concept
-        function loadConcept(index) {
-            const concept = adConcepts[index];
-            imageUrl.value = concept.image;
-            logoUrl.value = concept.logo;
-            headline.value = concept.headline;
-            bullets.value = concept.bullets;
-            cta.value = concept.cta;
-            updatePreview();
-        }
-
-        // Function to update the preview
-        function updatePreview() {
-            previewBgImage.src = imageUrl.value;
-            previewLogo.src = logoUrl.value;
-            previewHeadline.innerText = headline.value;
-            previewBullets.innerText = bullets.value;
-            previewCta.innerText = cta.value;
-        }
-
-        // Function to handle aspect ratio change
-        function updateAspectRatio() {
-            if (aspectRatio.value === 'stories') {
-                adPreview.classList.remove('ad-preview', 'w-full', 'max-w-lg');
-                adPreview.classList.add('stories', 'w-full', 'max-w-xs', 'mx-auto');
-            } else {
-                adPreview.classList.remove('stories', 'max-w-xs', 'mx-auto');
-                adPreview.classList.add('ad-preview', 'w-full', 'max-w-lg');
-            }
-        }
+        // Get all the necessary elements from the page
+        const linkInput = document.getElementById('link-input');
+        const previewButton = document.getElementById('preview-button');
+        const mediaWrapper = document.getElementById('media-wrapper');
+        const placeholderText = document.getElementById('placeholder-text');
         
-        // Function to download the ad preview
-        function downloadAd() {
-            html2canvas(adPreview, { allowTaint: true, useCORS: true, logging: true }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `learn_handball_new_concept.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            }).catch(err => {
-                console.error("Error downloading image:", err);
-                alert("Could not download image. If using an external image, check browser console for CORS errors.");
+        const btn4to5 = document.getElementById('btn-4-5');
+        const btn9to16 = document.getElementById('btn-9-16');
+        const aspectButtons = [btn4to5, btn9to16];
+
+        let currentAspectRatio = 'aspect-[4/5]'; // Default aspect ratio
+
+        /**
+         * Converts a Google Drive sharing link into a direct embeddable link.
+         * @param {string} url - The original Google Drive sharing URL
+         * @returns {string} - The direct media URL
+         */
+        function convertGoogleDriveLink(url) {
+            let fileId = null;
+            
+            // Regex to find the File ID in common Google Drive link formats
+            const regex = /\/d\/(.*?)(?:\/view|\?usp|$)/;
+            const match = url.match(regex);
+            
+            if (match && match[1]) {
+                fileId = match[1];
+                // Use the 'uc' (user content) link for direct embedding
+                return `https://drive.google.com/uc?id=${fileId}`;
+            }
+            
+            // If it's not a matching Google Drive link, return the original URL
+            return url;
+        }
+
+        /**
+         * Updates the active state of aspect ratio buttons
+         */
+        function updateActiveButton(activeButton) {
+            aspectButtons.forEach(button => {
+                if (button === activeButton) {
+                    button.classList.add('bg-blue-600', 'text-white');
+                    button.classList.remove('bg-gray-700', 'text-gray-300');
+                } else {
+                    button.classList.remove('bg-blue-600', 'text-white');
+                    button.classList.add('bg-gray-700', 'text-gray-300');
+                }
             });
         }
 
-        // Event Listeners
-        conceptSelect.addEventListener('change', (e) => loadConcept(e.target.value));
-        aspectRatio.addEventListener('change', updateAspectRatio);
-        imageUrl.addEventListener('input', updatePreview);
-        logoUrl.addEventListener('input', updatePreview);
-        headline.addEventListener('input', updatePreview);
-        bullets.addEventListener('input', updatePreview);
-        cta.addEventListener('input', updatePreview);
-        downloadBtn.addEventListener('click', downloadAd);
+        // --- Event Listeners ---
 
-        // Initial Load
-        loadConcept(0);
-        updateAspectRatio();
+        // Handle 4:5 button click
+        btn4to5.addEventListener('click', () => {
+            currentAspectRatio = 'aspect-[4/5]';
+            mediaWrapper.classList.remove('aspect-[9/16]');
+            mediaWrapper.classList.add('aspect-[4/5]');
+            updateActiveButton(btn4to5);
+        });
+
+        // Handle 9:16 button click
+        btn9to16.addEventListener('click', () => {
+            currentAspectRatio = 'aspect-[9/16]';
+            mediaWrapper.classList.remove('aspect-[4/5]');
+            mediaWrapper.classList.add('aspect-[9/16]');
+            updateActiveButton(btn9to16);
+        });
+
+        // Handle the main "Generate Preview" button click
+        previewButton.addEventListener('click', () => {
+            let url = linkInput.value.trim();
+            if (!url) {
+                alert('Please paste a link first.');
+                return;
+            }
+
+            // Convert the link if it's from Google Drive
+            const mediaUrl = convertGoogleDriveLink(url);
+
+            // Clear the wrapper and hide placeholder
+            mediaWrapper.innerHTML = '';
+            if (placeholderText) {
+                placeholderText.style.display = 'none';
+            }
+            
+            // Apply the currently selected aspect ratio
+            mediaWrapper.classList.remove('aspect-[4/5]', 'aspect-[9/16]');
+            mediaWrapper.classList.add(currentAspectRatio);
+
+            // Determine if it's an image or video
+            const isImage = /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(mediaUrl.split('?')[0]);
+            const isVideo = /\.(mp4|mov|webm|ogg)$/i.test(mediaUrl.split('?')[0]);
+
+            if (isImage || (url.includes('drive.google.com') && !isVideo)) {
+                // Assume Google Drive link is an image if not obviously a video
+                const img = document.createElement('img');
+                img.src = mediaUrl;
+                img.alt = 'Media Preview';
+                img.onerror = () => {
+                    mediaWrapper.innerHTML = '<p class="text-red-400 text-center p-4">Error loading image. Check link or permissions.</p>';
+                    mediaWrapper.classList.remove(currentAspectRatio);
+                };
+                mediaWrapper.appendChild(img);
+            } else if (isVideo) {
+                const video = document.createElement('video');
+                video.src = mediaUrl;
+                video.controls = true;
+                video.autoplay = true;
+                video.muted = true;
+                video.playsInline = true;
+                video.loop = true;
+                video.onerror = () => {
+                    mediaWrapper.innerHTML = '<p class="text-red-400 text-center p-4">Error loading video. Check link or permissions.</p>';
+                    mediaWrapper.classList.remove(currentAspectRatio);
+                };
+                mediaWrapper.appendChild(video);
+            } else {
+                // Fallback for GDrive links or other types
+                const img = document.createElement('img');
+                img.src = mediaUrl;
+                img.alt = 'Media Preview';
+                img.onerror = () => {
+                    mediaWrapper.innerHTML = '<p class="text-red-400 text-center p-4">Unsupported link or file type. Could not load preview.</p>';
+                    mediaWrapper.classList.remove(currentAspectRatio);
+                };
+                mediaWrapper.appendChild(img);
+            }
+        });
+
+        // Set initial button state on load
+        updateActiveButton(btn4to5);
+        mediaWrapper.classList.add(currentAspectRatio);
     </script>
+
 </body>
 </html>
