@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Previewer</title>
+    <title>Campaign Analysis & Ad Preview</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -17,47 +17,93 @@
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 min-h-screen flex items-center justify-center font-sans p-4">
+<body class="bg-gray-100 text-gray-900 font-sans p-4 sm:p-8">
 
-    <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-md">
+    <main class="max-w-7xl mx-auto">
+    
+        <!-- --- Top Section: Campaign Analysis (from your screenshot) --- -->
+        <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl mb-8 sm:mb-12">
+            <h1 class="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 text-gray-800">Campaign Analysis & New Ad Concepts</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                
+                <!-- Best Performing Copy -->
+                <div>
+                    <h2 class="text-xl font-semibold mb-3">Best Performing Copy (by CTR & CPC)</h2>
+                    <p class="text-sm text-gray-600 mb-4">(Note: Conversion data was not broken down by copy, so CTR and CPC are our best metrics for engagement.)</p>
+                    <div class="space-y-3 text-gray-700">
+                        <div>
+                            <strong class="font-medium">Best Headlines:</strong>
+                            <ul class="list-disc list-inside ml-4 text-sm">
+                                <li>"PLAN. TRAIN. SUCCEED." (4.81% CTR, 1.56 NOK CPC)</li>
+                                <li>"Try for 14 days" (4.75% CTR, 1.71 NOK CPC)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <strong class="font-medium">Best Primary Text:</strong>
+                            <ul class="list-disc list-inside ml-4 text-sm">
+                                <li>"Get access to our coaching platform for Handball w..." (5.12% CTR, 1.76 NOK CPC)</li>
+                                <li>"The video exercises the pros use, now available fo..." (4.25% CTR, 2.10 NOK CPC)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategy for New Ads -->
+                <div>
+                    <h2 class="text-xl font-semibold mb-3">Strategy for New Ads</h2>
+                    <p class="text-sm text-gray-700 leading-relaxed">
+                        This data shows our converting audience is **Males 35-54+**. This is the "parent coach" or "dad coach" demographic.
+                    </p>
+                    <p class="text-sm text-gray-700 leading-relaxed mt-3">
+                        Our winning ads focused on platform features. These new concepts are designed to test completely new emotional angles and value propositions that will resonate directly with this specific audience, while following Atle's feedback (clear hook, bullets, CTA button).
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- --- Bottom Section: New Ad Concept Canvas --- -->
+        <h2 class="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 text-gray-800">New Ad Concept Canvas</h2>
         
-        <h1 class="text-2xl font-bold text-center mb-6 text-white">Media Preview Tool</h1>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+            
+            <!-- Column 1: Ad Controls -->
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl lg:h-fit">
+                <h3 class="text-xl font-semibold mb-5">Ad Controls</h3>
+                
+                <!-- Input for the link -->
+                <div class="mb-5">
+                    <label for="link-input" class="block text-sm font-medium text-gray-600 mb-2">Image URL</label>
+                    <input type="text" id="link-input" placeholder="Paste a link (Google Drive, imgur, etc.)" class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <p id="error-msg" class="text-red-500 text-sm mt-1 h-4"></p>
+                </div>
 
-        <!-- Input for the link -->
-        <div class="mb-4">
-            <label for="link-input" class="block text-sm font-medium text-gray-300 mb-2">Image or Video Link</label>
-            <input type="text" id="link-input" placeholder="Paste a link (Google Drive, imgur, etc.)" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-        </div>
-
-        <!-- Aspect Ratio Buttons -->
-        <div class="mb-6">
-            <label class="block text-sm font-medium text-gray-300 mb-2">Select Aspect Ratio</label>
-            <div class="flex gap-4">
-                <button id="btn-4-5" class="aspect-btn flex-1 px-4 py-3 rounded-lg font-medium transition-colors">4:5</button>
-                <button id="btn-9-16" class="aspect-btn flex-1 px-4 py-3 rounded-lg font-medium transition-colors">9:16</button>
+                <!-- Aspect Ratio Buttons -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-2">Aspect Ratio</label>
+                    <div class="flex gap-4">
+                        <button id="btn-4-5" class="aspect-btn flex-1 px-4 py-3 rounded-lg font-medium transition-colors">4:5</button>
+                        <button id="btn-9-16" class="aspect-btn flex-1 px-4 py-3 rounded-lg font-medium transition-colors">9:16</button>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <!-- Preview Button -->
-        <button id="preview-button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors shadow-lg">
-            Generate Preview
-        </button>
-
-        <!-- Preview Area -->
-        <div id="preview-container" class="mt-6 border-2 border-gray-700 border-dashed rounded-lg p-4 min-h-[200px] flex items-center justify-center">
-            <div id="media-wrapper" class="bg-gray-700 rounded-lg w-full transition-all duration-300">
-                <p id="placeholder-text" class="text-gray-400 text-center p-10">Your preview will appear here</p>
+            <!-- Column 2-3: Preview Area -->
+            <div class="lg:col-span-2 bg-gray-800 p-4 sm:p-6 rounded-2xl shadow-xl flex items-center justify-center min-h-[400px] lg:min-h-[600px]">
+                <div id="media-wrapper" class="bg-gray-700 rounded-lg w-full transition-all duration-300">
+                    <p id="placeholder-text" class="text-gray-400 text-center p-10">Preview will appear here</e>
+                </div>
             </div>
-        </div>
 
-    </div>
+        </div>
+    </main>
 
     <script>
         // Get all the necessary elements from the page
         const linkInput = document.getElementById('link-input');
-        const previewButton = document.getElementById('preview-button');
         const mediaWrapper = document.getElementById('media-wrapper');
         const placeholderText = document.getElementById('placeholder-text');
+        const errorMsg = document.getElementById('error-msg');
         
         const btn4to5 = document.getElementById('btn-4-5');
         const btn9to16 = document.getElementById('btn-9-16');
@@ -94,37 +140,26 @@
             aspectButtons.forEach(button => {
                 if (button === activeButton) {
                     button.classList.add('bg-blue-600', 'text-white');
-                    button.classList.remove('bg-gray-700', 'text-gray-300');
+                    button.classList.remove('bg-gray-200', 'text-gray-700');
                 } else {
                     button.classList.remove('bg-blue-600', 'text-white');
-                    button.classList.add('bg-gray-700', 'text-gray-300');
+                    button.classList.add('bg-gray-200', 'text-gray-700');
                 }
             });
         }
-
-        // --- Event Listeners ---
-
-        // Handle 4:5 button click
-        btn4to5.addEventListener('click', () => {
-            currentAspectRatio = 'aspect-[4/5]';
-            mediaWrapper.classList.remove('aspect-[9/16]');
-            mediaWrapper.classList.add('aspect-[4/5]');
-            updateActiveButton(btn4to5);
-        });
-
-        // Handle 9:16 button click
-        btn9to16.addEventListener('click', () => {
-            currentAspectRatio = 'aspect-[9/16]';
-            mediaWrapper.classList.remove('aspect-[4/5]');
-            mediaWrapper.classList.add('aspect-[9/16]');
-            updateActiveButton(btn9to16);
-        });
-
-        // Handle the main "Generate Preview" button click
-        previewButton.addEventListener('click', () => {
+        
+        /**
+         * Generates the media preview
+         */
+        function generatePreview() {
             let url = linkInput.value.trim();
             if (!url) {
-                alert('Please paste a link first.');
+                // If input is empty, show placeholder and clear error
+                mediaWrapper.innerHTML = '';
+                placeholderText.style.display = 'block';
+                mediaWrapper.appendChild(placeholderText);
+                mediaWrapper.classList.remove('aspect-[4/5]', 'aspect-[9/16]');
+                errorMsg.textContent = '';
                 return;
             }
 
@@ -133,9 +168,8 @@
 
             // Clear the wrapper and hide placeholder
             mediaWrapper.innerHTML = '';
-            if (placeholderText) {
-                placeholderText.style.display = 'none';
-            }
+            placeholderText.style.display = 'none';
+            errorMsg.textContent = '';
             
             // Apply the currently selected aspect ratio
             mediaWrapper.classList.remove('aspect-[4/5]', 'aspect-[9/16]');
@@ -144,16 +178,22 @@
             // Determine if it's an image or video
             const isImage = /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(mediaUrl.split('?')[0]);
             const isVideo = /\.(mp4|mov|webm|ogg)$/i.test(mediaUrl.split('?')[0]);
+            
+            const handleError = () => {
+                mediaWrapper.innerHTML = ''; // Clear any broken elements
+                mediaWrapper.classList.remove(currentAspectRatio); // Remove aspect ratio styling
+                errorMsg.textContent = 'Error loading media. Check link or permissions.';
+                placeholderText.style.display = 'block'; // Show placeholder
+                mediaWrapper.appendChild(placeholderText);
+Next, I'll add the "Load New Concept" dropdown and the "Logo URL" input.
+            };
 
             if (isImage || (url.includes('drive.google.com') && !isVideo)) {
                 // Assume Google Drive link is an image if not obviously a video
                 const img = document.createElement('img');
                 img.src = mediaUrl;
                 img.alt = 'Media Preview';
-                img.onerror = () => {
-                    mediaWrapper.innerHTML = '<p class="text-red-400 text-center p-4">Error loading image. Check link or permissions.</p>';
-                    mediaWrapper.classList.remove(currentAspectRatio);
-                };
+                img.onerror = handleError;
                 mediaWrapper.appendChild(img);
             } else if (isVideo) {
                 const video = document.createElement('video');
@@ -163,28 +203,41 @@
                 video.muted = true;
                 video.playsInline = true;
                 video.loop = true;
-                video.onerror = () => {
-                    mediaWrapper.innerHTML = '<p class="text-red-400 text-center p-4">Error loading video. Check link or permissions.</p>';
-                    mediaWrapper.classList.remove(currentAspectRatio);
-                };
+                video.onerror = handleError;
                 mediaWrapper.appendChild(video);
             } else {
                 // Fallback for GDrive links or other types
                 const img = document.createElement('img');
                 img.src = mediaUrl;
                 img.alt = 'Media Preview';
-                img.onerror = () => {
-                    mediaWrapper.innerHTML = '<p class="text-red-400 text-center p-4">Unsupported link or file type. Could not load preview.</p>';
-                    mediaWrapper.classList.remove(currentAspectRatio);
-                };
+                img.onerror = handleError;
                 mediaWrapper.appendChild(img);
             }
+        }
+
+        // --- Event Listeners ---
+
+        // Handle 4:5 button click
+        btn4to5.addEventListener('click', () => {
+            currentAspectRatio = 'aspect-[4/5]';
+            updateActiveButton(btn4to5);
+            generatePreview(); // Re-generate preview with new aspect ratio
         });
+
+        // Handle 9:16 button click
+        btn9to16.addEventListener('click', () => {
+            currentAspectRatio = 'aspect-[9/16]';
+            updateActiveButton(btn9to16);
+            generatePreview(); // Re-generate preview with new aspect ratio
+        });
+
+        // Handle link input (triggers on paste, type, delete)
+        linkInput.addEventListener('input', generatePreview);
 
         // Set initial button state on load
         updateActiveButton(btn4to5);
-        mediaWrapper.classList.add(currentAspectRatio);
     </script>
 
 </body>
 </html>
+
