@@ -3,234 +3,329 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ad Concept Previewer</title>
-    <!-- Load Tailwind CSS -->
+    <title>Ad Concept Canvas</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Include html2canvas for downloading -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* This ensures the image or video fills the aspect ratio box */
-        #media-wrapper img,
-        #media-wrapper video {
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* --- LOCKED TO 4:5 ASPECT RATIO --- */
+        .ad-preview {
+            aspect-ratio: 4 / 5;
+        }
+        /* This ensures the image or video fills the container */
+        #media-container img,
+        #media-container video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 0.5rem; /* rounded-lg */
+            position: absolute;
+            top: 0;
+            left: 0;
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-900 font-sans p-4 sm:p-8">
-
-    <main class="max-w-7xl mx-auto">
-    
-        <!-- --- Ad Concept Canvas --- -->
-        <h2 class="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 text-gray-800">New Ad Concept Canvas</h2>
+<body class="bg-gray-200 p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
         
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+        <!-- === Ad Canvas Section === -->
+        <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Ad Concept Canvas</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            <!-- Column 1: Ad Controls -->
-            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl lg:h-fit">
-                <h3 class="text-xl font-semibold mb-5">Ad Controls</h3>
+            <!-- Controls -->
+            <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg h-fit">
+                <h3 class="text-xl font-bold mb-4">Ad Controls</h3>
                 
-                <!-- Load New Concept Dropdown -->
-                <div class="mb-5">
-                    <label for="concept-select" class="block text-sm font-medium text-gray-600 mb-2">Load New Concept</label>
-                    <select id="concept-select" class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option>1. "The 'Dad Coach' Persona"</option>
-                        <!-- Add other concepts here as <option> tags -->
+                <div class="mb-4">
+                    <label for="conceptSelect" class="block text-sm font-medium text-gray-700 mb-1">Load Concept:</label>
+                    <select id="conceptSelect" class="w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                        <!-- Options are now loaded from the new findings document -->
+                        <option value="0">1. The "Dad Coach" Persona</option>
+                        <option value="1">2. The "Specific Solution"</option>
+                        <option value="2">3. The "Emotional Payoff"</option>
                     </select>
                 </div>
 
-                <!-- Aspect Ratio Buttons -->
-                <div class="mb-5">
-                    <label class="block text-sm font-medium text-gray-600 mb-2">Aspect Ratio</label>
-                    <div class="flex gap-4">
-                        <button id="btn-4-5" class="aspect-btn flex-1 px-4 py-3 rounded-lg font-medium transition-colors">4:5</button>
-                        <button id="btn-9-16" class="aspect-btn flex-1 px-4 py-3 rounded-lg font-medium transition-colors">9:16</button>
-                    </div>
+                <!-- === FILE UPLOAD === -->
+                <div class="mb-4">
+                    <label for="fileUpload" class="block text-sm font-medium text-gray-700 mb-1">Upload Image/Video:</label>
+                    <input type="file" id="fileUpload" accept="image/*,video/*" class="w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-md file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-50 file:text-blue-700
+                        hover:file:bg-blue-100
+                    "/>
+                    <p class="text-xs text-gray-500 mt-1">This is the most reliable method.</p>
                 </div>
-
-                <!-- Image URL Input -->
-                <div class="mb-5">
-                    <label for="link-input" class="block text-sm font-medium text-gray-600 mb-2">Image URL</label>
-                    <input type="text" id="link-input" placeholder="Paste a link (Google Drive, imgur, etc.)" class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                
+                <div class="mb-4">
+                    <label for="imageUrl" class="block text-sm font-medium text-gray-700 mb-1">(Or paste URL):</label>
+                    <input type="text" id="imageUrl" class="w-full p-2 border border-gray-300 rounded-md shadow-sm" placeholder="Paste Imgur, GDrive, or .mp4 link">
                     <p id="error-msg" class="text-red-500 text-sm mt-1 h-4"></p>
                 </div>
 
-                <!-- Logo URL Input -->
-                <div class="mb-5">
-                    <label for="logo-input" class="block text-sm font-medium text-gray-600 mb-2">Logo URL</label>
-                    <input type="text" id="logo-input" placeholder="Paste logo URL (optional)" class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <!-- === LOGO URL INPUT REMOVED === -->
+
+                <div class="mb-4">
+                    <label for="headline" class="block text-sm font-medium text-gray-700 mb-1">Headline (H1):</label>
+                    <textarea id="headline" rows="3" class="w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
                 </div>
 
-                <!-- Headline Input -->
-                <div class="mb-5">
-                    <label for="headline-input" class="block text-sm font-medium text-gray-600 mb-2">Headline</label>
-                    <input type="text" id="headline-input" placeholder="Enter ad headline" class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <div class="mb-4">
+                    <label for="bullets" class="block text-sm font-medium text-gray-700 mb-1">Value Props (Use • for bullets):</label>
+                    <textarea id="bullets" rows="4" class="w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
                 </div>
 
-                <!-- Primary Text Input -->
-                <div class="mb-5">
-                    <label for="primary-text-input" class="block text-sm font-medium text-gray-600 mb-2">Primary Text</label>
-                    <textarea id="primary-text-input" rows="3" placeholder="Enter primary ad text" class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                <div class="mb-4">
+                    <label for="cta" class="block text-sm font-medium text-gray-700 mb-1">CTA Button Text:</label>
+                    <input type="text" id="cta" class="w-full p-2 border border-gray-300 rounded-md shadow-sm">
                 </div>
-
-                <!-- CTA Input -->
-                <div>
-                    <label for="cta-input" class="block text-sm font-medium text-gray-600 mb-2">CTA</label>
-                    <input type="text" id="cta-input" placeholder="Enter call to action (e.g., Learn More)" class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                </div>
+                
+                <button id="downloadBtn" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200">
+                    Download as PNG
+                </button>
             </div>
 
-            <!-- Column 2-3: Preview Area -->
-            <div class="lg:col-span-2 bg-gray-800 p-4 sm:p-6 rounded-2xl shadow-xl flex items-center justify-center min-h-[400px] lg:min-h-[600px]">
-                <div id="media-wrapper" class="bg-gray-700 rounded-lg w-full transition-all duration-300">
-                    <p id="placeholder-text" class="text-gray-400 text-center p-10">Preview will appear here</p>
+            <!-- Ad Preview -->
+            <div class="lg:col-span-2">
+                <div id="adPreviewContainer" class="flex items-center justify-center">
+                    <!-- This div is now locked to 4:5 -->
+                    <div id="adPreview" class="ad-preview w-full max-w-md bg-gray-700 rounded-lg overflow-hidden shadow-2xl relative">
+                        
+                        <!-- Media Container -->
+                        <div id="media-container" class="absolute inset-0 w-full h-full bg-gray-800">
+                            <p id="placeholder-text" class="text-gray-400 text-center p-10 absolute inset-0 flex items-center justify-center">
+                                Upload or paste a link to see preview
+                            </p>
+                        </div> 
+                        
+                        <!-- Overlay/Scrim -->
+                        <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+                        
+                        <!-- Ad Content -->
+                        <div class="absolute inset-0 p-6 flex flex-col justify-between text-white">
+                            <!-- === STATIC LOGO PLACEHOLDER (TOP LEFT) === -->
+                            <div class="flex-shrink-0">
+                                <div class="h-8 md:h-10 w-auto bg-white p-1 rounded-sm inline-block">
+                                    <img src="https://placehold.co/150x40/ffffff/000000?text=LOGO" alt="Logo Placeholder" class="h-full w-auto">
+                                </div>
+                            </div>
+                            
+                            <!-- Text Content (centered) -->
+                            <div class="flex-grow flex flex-col items-center justify-center text-center p-4">
+                                <h1 id="previewHeadline" class="text-3xl md:text-5xl font-bold leading-tight shadow-text" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.7);"></h1>
+                                <div id="previewBullets" class="text-lg md:text-2xl mt-4 font-medium leading-normal whitespace-pre-line shadow-text" style="text-shadow: 1px 1px 6px rgba(0,0,0,0.8);"></div>
+                            </div>
+                            
+                            <!-- === STATIC LOGO PLACEHOLDER (BOTTOM LEFT) === -->
+                            <!-- This is a placeholder matching your screenshot. -->
+                            <img src="https://placehold.co/200x50/ffffff/000000?text=LEARN+HANDBALL+LOGO" alt="Logo Placeholder" class="absolute bottom-24 left-6 w-32 h-auto opacity-80">
+
+                            <!-- CTA Button -->
+                            <div class="flex-shrink-0 w-full">
+                                <div id="previewCta" class="bg-white text-gray-900 font-bold text-lg md:text-2xl text-center p-3 md:p-4 rounded-md w-full max-w-md mx-auto shadow-lg">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
-    </main>
+    </div>
 
     <script>
-        // Get all the necessary elements from the page
-        const linkInput = document.getElementById('link-input');
-        const mediaWrapper = document.getElementById('media-wrapper');
+        // === DOM Elements ===
+        const conceptSelect = document.getElementById('conceptSelect');
+        const fileUpload = document.getElementById('fileUpload');
+        const imageUrl = document.getElementById('imageUrl');
+        // logoUrl input removed
+        const headline = document.getElementById('headline');
+        const bullets = document.getElementById('bullets');
+        const cta = document.getElementById('cta');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        const adPreview = document.getElementById('adPreview');
+        const mediaContainer = document.getElementById('media-container');
         const placeholderText = document.getElementById('placeholder-text');
         const errorMsg = document.getElementById('error-msg');
         
-        const btn4to5 = document.getElementById('btn-4-5');
-        const btn9to16 = document.getElementById('btn-9-16');
-        const aspectButtons = [btn4to5, btn9to16]; // Only 4:5 and 9:16
+        // previewLogo element removed
+        const previewHeadline = document.getElementById('previewHeadline');
+        const previewBullets = document.getElementById('previewBullets');
+        const previewCta = document.getElementById('previewCta');
 
-        let currentAspectRatio = 'aspect-[4/5]'; // Default aspect ratio
+        // === Ad Concept Data (UPDATED from your document) ===
+        const adConcepts = [
+            {
+                name: "The 'Dad Coach' Persona",
+                imageUrl: "https://placehold.co/1080x1350/E1B49D/271F1A?text=Father+coaching+child+(4:5)",
+                headline: "Coaching your kid's team?",
+                bullets: "• Make every practice fun & effective\n• 700+ age-specific video exercises\n• Be the hero, not just the coach",
+                cta: "Try free for 14 days"
+            },
+            {
+                name: "The 'Specific Solution'",
+                imageUrl: "https://placehold.co/1080x1350/DDE5ED/1D3A59?text=App+Planning+Interface+(4:5)",
+                headline: "Your entire season, planned in 10 minutes.",
+                bullets: "• 700+ video exercises\n• Ready-made training plans\n• Stop searching, start coaching",
+                cta: "Try free for 14 days"
+            },
+            {
+                name: "The 'Emotional Payoff'",
+                imageUrl: "https://placehold.co/1080x1350/A6D9F0/2A2F33?text=Kids+having+fun+at+practice+(4:5)",
+                headline: "Run practices your players will actually love.",
+                bullets: "• 700+ fun, engaging video exercises\n• For players age 6-16\n• Build skills and confidence",
+                cta: "Try free for 14 days. Sign up now!"
+            }
+        ];
 
-        /**
-         * Converts a Google Drive sharing link into a direct embeddable link.
-         * @param {string} url - The original Google Drive sharing URL
-         * @returns {string} - The direct media URL
-         */
+        // === Link Converters ===
         function convertGoogleDriveLink(url) {
             let fileId = null;
-            
-            // **FIXED REGEX**: This now looks for /file/d/FILE_ID, /d/FILE_ID, and open?id=FILE_ID
             const regex = /(?:file\/d\/|open\?id=|\/d\/)([a-zA-Z0-9_-]{28,})/;
             const match = url.match(regex);
             
             if (match && match[1]) {
                 fileId = match[1];
-                // Use the 'uc' (user content) link for direct embedding
                 return `https://drive.google.com/uc?id=${fileId}`;
             }
-            
-            // If it's not a matching Google Drive link, return the original URL
             return url;
         }
 
-        /**
-         * Updates the active state of aspect ratio buttons
-         */
-        function updateActiveButton(activeButton) {
-            aspectButtons.forEach(button => {
-                if (button === activeButton) {
-                    button.classList.add('bg-blue-600', 'text-white');
-                    button.classList.remove('bg-gray-200', 'text-gray-700');
-                } else {
-                    button.classList.remove('bg-blue-600', 'text-white');
-                    button.classList.add('bg-gray-200', 'text-gray-700');
-                }
-            });
+        // === Main Update Functions ===
+
+        function loadConcept(index) {
+            const concept = adConcepts[index];
+            imageUrl.value = concept.imageUrl; // Set the URL in the text box
+            // logoUrl.value removed
+            headline.value = concept.headline;
+            bullets.value = concept.bullets;
+            cta.value = concept.cta;
+            
+            fileUpload.value = ''; 
+            
+            updatePreviewFromUrl();
+            updateTextPreview();
         }
-        
-        /**
-         * Generates the media preview
-         */
-        function generatePreview() {
-            // **FIX:** Was `linkInput..trim()`, changed to `linkInput.value.trim()`
-            let url = linkInput.value.trim(); 
+
+        function renderMedia(url) {
+            mediaContainer.innerHTML = '';
+            errorMsg.textContent = '';
+            placeholderText.style.display = 'none';
+
+            const isImage = /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(url.split('?')[0]) || url.startsWith('data:image');
+            const isVideo = /\.(mp4|mov|webm|ogg)$/i.test(url.split('?')[0]) || url.startsWith('data:video');
+
+            const handleError = () => {
+                mediaContainer.innerHTML = '';
+                mediaContainer.appendChild(placeholderText);
+                placeholderText.style.display = 'flex';
+                errorMsg.textContent = 'Error: Could not load media.';
+            };
+
+            let mediaElement;
+            if (isImage || (url.includes('drive.google.com') && !isVideo)) {
+                mediaElement = document.createElement('img');
+                mediaElement.src = url;
+                mediaElement.alt = 'Ad Preview';
+            } else if (isVideo) {
+                mediaElement = document.createElement('video');
+                mediaElement.src = url;
+                mediaElement.controls = true;
+                mediaElement.autoplay = true;
+                mediaElement.muted = true;
+                mediaElement.playsInline = true;
+                mediaElement.loop = true;
+            } else {
+                mediaElement = document.createElement('img');
+                mediaElement.src = url;
+                mediaElement.alt = 'Ad Preview';
+            }
+            
+            mediaElement.onerror = handleError;
+            mediaContainer.appendChild(mediaElement);
+        }
+
+        fileUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const objectUrl = URL.createObjectURL(file);
+                renderMedia(objectUrl);
+                imageUrl.value = ''; 
+                errorMsg.textContent = '';
+            }
+        });
+
+        function updatePreviewFromUrl() {
+            let url = imageUrl.value.trim();
             if (!url) {
-                // If input is empty, show placeholder and clear error
-                mediaWrapper.innerHTML = ''; // Clear previous media
-                placeholderText.style.display = 'block';
-                mediaWrapper.appendChild(placeholderText); // Add placeholder back
-                mediaWrapper.classList.remove('aspect-[4/5]', 'aspect-[9/16]'); // Removed 1:1
+                if (!fileUpload.value) {
+                    mediaContainer.innerHTML = '';
+                    mediaContainer.appendChild(placeholderText);
+                    placeholderText.style.display = 'flex';
+                }
                 errorMsg.textContent = '';
                 return;
             }
-
-            // Convert the link if it's from Google Drive
+            
+            fileUpload.value = '';
             const mediaUrl = convertGoogleDriveLink(url);
-
-            // Clear the wrapper and hide placeholder
-            mediaWrapper.innerHTML = '';
-            placeholderText.style.display = 'none';
-            errorMsg.textContent = '';
-            
-            // Apply the currently selected aspect ratio
-            mediaWrapper.classList.remove('aspect-[4/5]', 'aspect-[9/16]'); // Removed 1:1
-            mediaWrapper.classList.add(currentAspectRatio);
-
-            // Determine if it's an image or video
-            const isImage = /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(mediaUrl.split('?')[0]);
-            const isVideo = /\.(mp4|mov|webm|ogg)$/i.test(mediaUrl.split('?')[0]);
-            
-            // This is the error handling function
-            const handleError = () => {
-                mediaWrapper.innerHTML = ''; // Clear any broken elements
-                mediaWrapper.classList.remove(currentAspectRatio); // Remove aspect ratio styling
-                errorMsg.textContent = 'Error loading media. Check link or permissions.';
-                placeholderText.style.display = 'block'; // Show placeholder
-                mediaWrapper.appendChild(placeholderText);
-            };
-
-            if (isImage || (url.includes('drive.google.com') && !isVideo)) {
-                // Assume Google Drive link is an image if not obviously a video
-                const img = document.createElement('img');
-                img.src = mediaUrl;
-                img.alt = 'Media Preview';
-                img.onerror = handleError;
-                mediaWrapper.appendChild(img);
-            } else if (isVideo) {
-                const video = document.createElement('video');
-                video.src = mediaUrl;
-                video.controls = true;
-                video.autoplay = true;
-                video.muted = true;
-                video.playsInline = true;
-                video.loop = true;
-                video.onerror = handleError;
-                mediaWrapper.appendChild(video);
-            } else {
-                // Fallback for GDrive links or other types
-                const img = document.createElement('img');
-                img.src = mediaUrl;
-                img.alt = 'Media Preview';
-                img.onerror = handleError;
-                mediaWrapper.appendChild(img);
-            }
+            renderMedia(mediaUrl);
         }
 
-        // --- Event Listeners ---
+        function updateTextPreview() {
+            // previewLogo.src logic removed
+            previewHeadline.innerText = headline.value;
+            previewBullets.innerText = bullets.value;
+            previewCta.innerText = cta.value;
+        }
 
-        // Handle 4:5 button click
-        btn4to5.addEventListener('click', () => {
-            currentAspectRatio = 'aspect-[4/5]';
-            updateActiveButton(btn4to5);
-            generatePreview(); // Re-generate preview with new aspect ratio
-        });
+        function downloadAd() {
+            const media = mediaContainer.querySelector('img, video');
+            if (media) {
+                media.style.imageRendering = 'pixelated';
+            }
 
-        // Handle 9:16 button click
-        btn9to16.addEventListener('click', () => {
-            currentAspectRatio = 'aspect-[9:16]';
-            updateActiveButton(btn9to16);
-            generatePreview(); // Re-generate preview with new aspect ratio
-        });
+            html2canvas(adPreview, { 
+                allowTaint: true, 
+                useCORS: true, 
+                logging: true,
+                scale: 2,
+                onclone: (doc) => {
+                    const media = doc.querySelector('#media-container img, #media-container video');
+                    if (media && media.tagName === 'IMG') {
+                        media.crossOrigin = "anonymous";
+                    }
+                }
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `learn_handball_ad_concept.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(err => {
+                console.error("Error downloading image:", err);
+                alert("Could not download image. Check console for details.");
+            });
+        }
 
-        // Handle link input (triggers on paste, type, delete)
-        linkInput.addEventListener('input', generatePreview);
+        // === Event Listeners ===
+        conceptSelect.addEventListener('change', (e) => loadConcept(e.target.value));
+        
+        imageUrl.addEventListener('input', updatePreviewFromUrl);
+        // logoUrl.addEventListener removed
+        headline.addEventListener('input', updateTextPreview);
+        bullets.addEventListener('input', updateTextPreview);
+        cta.addEventListener('input', updateTextPreview);
+        
+        downloadBtn.addEventListener('click', downloadAd);
 
-        // Set initial button state on load
-        updateActiveButton(btn4to5); // Default to 4:5
+        // Initial Load
+        loadConcept(0);
     </script>
-
 </body>
 </html>
 
