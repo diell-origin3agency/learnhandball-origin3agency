@@ -71,20 +71,35 @@
             <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl lg:h-fit">
                 <h3 class="text-xl font-semibold mb-5">Ad Controls</h3>
                 
-                <!-- Input for the link -->
+                <!-- Load New Concept Dropdown -->
+                <div class="mb-5">
+                    <label for="concept-select" class="block text-sm font-medium text-gray-600 mb-2">Load New Concept</label>
+                    <select id="concept-select" class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option>1. "The 'Dad Coach' Persona"</option>
+                        <!-- Add other concepts here as <option> tags -->
+                    </select>
+                </div>
+
+                <!-- Aspect Ratio Buttons -->
+                <div class="mb-5">
+                    <label class="block text-sm font-medium text-gray-600 mb-2">Aspect Ratio</label>
+                    <div class="flex gap-4">
+                        <button id="btn-4-5" class="aspect-btn flex-1 px-4 py-3 rounded-lg font-medium transition-colors">4:5</button>
+                        <button id="btn-9-16" class="aspect-btn flex-1 px-4 py-3 rounded-lg font-medium transition-colors">9:16</button>
+                    </div>
+                </div>
+
+                <!-- Image URL Input -->
                 <div class="mb-5">
                     <label for="link-input" class="block text-sm font-medium text-gray-600 mb-2">Image URL</label>
                     <input type="text" id="link-input" placeholder="Paste a link (Google Drive, imgur, etc.)" class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     <p id="error-msg" class="text-red-500 text-sm mt-1 h-4"></p>
                 </div>
 
-                <!-- Aspect Ratio Buttons -->
+                <!-- Logo URL Input -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-2">Aspect Ratio</label>
-                    <div class="flex gap-4">
-                        <button id="btn-4-5" class="aspect-btn flex-1 px-4 py-3 rounded-lg font-medium transition-colors">4:5</button>
-                        <button id="btn-9-16" class="aspect-btn flex-1 px-4 py-3 rounded-lg font-medium transition-colors">9:16</button>
-                    </div>
+                    <label for="logo-input" class="block text-sm font-medium text-gray-600 mb-2">Logo URL</label>
+                    <input type="text" id="logo-input" placeholder="Paste logo URL (optional)" class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
             </div>
 
@@ -179,13 +194,13 @@
             const isImage = /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(mediaUrl.split('?')[0]);
             const isVideo = /\.(mp4|mov|webm|ogg)$/i.test(mediaUrl.split('?')[0]);
             
+            // This is the error handling function
             const handleError = () => {
                 mediaWrapper.innerHTML = ''; // Clear any broken elements
                 mediaWrapper.classList.remove(currentAspectRatio); // Remove aspect ratio styling
                 errorMsg.textContent = 'Error loading media. Check link or permissions.';
                 placeholderText.style.display = 'block'; // Show placeholder
                 mediaWrapper.appendChild(placeholderText);
-Next, I'll add the "Load New Concept" dropdown and the "Logo URL" input.
             };
 
             if (isImage || (url.includes('drive.google.com') && !isVideo)) {
@@ -226,7 +241,7 @@ Next, I'll add the "Load New Concept" dropdown and the "Logo URL" input.
 
         // Handle 9:16 button click
         btn9to16.addEventListener('click', () => {
-            currentAspectRatio = 'aspect-[9/16]';
+            currentAspectRatio = 'aspect-[9:16]';
             updateActiveButton(btn9to16);
             generatePreview(); // Re-generate preview with new aspect ratio
         });
