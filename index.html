@@ -21,7 +21,7 @@
 
     <main class="max-w-7xl mx-auto">
     
-        <!-- --- Top Section: Campaign Analysis (from your screenshot) --- -->
+        <!-- --- Top Section: Campaign Analysis --- -->
         <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl mb-8 sm:mb-12">
             <h1 class="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 text-gray-800">Campaign Analysis & New Ad Concepts</h1>
             
@@ -84,6 +84,7 @@
                 <div class="mb-5">
                     <label class="block text-sm font-medium text-gray-600 mb-2">Aspect Ratio</label>
                     <div class="flex gap-4">
+                        <button id="btn-1-1" class="aspect-btn flex-1 px-4 py-3 rounded-lg font-medium transition-colors">1:1</button>
                         <button id="btn-4-5" class="aspect-btn flex-1 px-4 py-3 rounded-lg font-medium transition-colors">4:5</button>
                         <button id="btn-9-16" class="aspect-btn flex-1 px-4 py-3 rounded-lg font-medium transition-colors">9:16</button>
                     </div>
@@ -106,7 +107,7 @@
             <!-- Column 2-3: Preview Area -->
             <div class="lg:col-span-2 bg-gray-800 p-4 sm:p-6 rounded-2xl shadow-xl flex items-center justify-center min-h-[400px] lg:min-h-[600px]">
                 <div id="media-wrapper" class="bg-gray-700 rounded-lg w-full transition-all duration-300">
-                    <p id="placeholder-text" class="text-gray-400 text-center p-10">Preview will appear here</e>
+                    <p id="placeholder-text" class="text-gray-400 text-center p-10">Preview will appear here</p>
                 </div>
             </div>
 
@@ -120,11 +121,12 @@
         const placeholderText = document.getElementById('placeholder-text');
         const errorMsg = document.getElementById('error-msg');
         
+        const btn1to1 = document.getElementById('btn-1-1');
         const btn4to5 = document.getElementById('btn-4-5');
         const btn9to16 = document.getElementById('btn-9-16');
-        const aspectButtons = [btn4to5, btn9to16];
+        const aspectButtons = [btn1to1, btn4to5, btn9to16];
 
-        let currentAspectRatio = 'aspect-[4/5]'; // Default aspect ratio
+        let currentAspectRatio = 'aspect-[1/1]'; // Default aspect ratio
 
         /**
          * Converts a Google Drive sharing link into a direct embeddable link.
@@ -134,8 +136,8 @@
         function convertGoogleDriveLink(url) {
             let fileId = null;
             
-            // Regex to find the File ID in common Google Drive link formats
-            const regex = /\/d\/(.*?)(?:\/view|\?usp|$)/;
+            // **FIXED REGEX**: This now looks for /file/d/FILE_ID, /d/FILE_ID, and open?id=FILE_ID
+            const regex = /(?:file\/d\/|open\?id=|\/d\/)([a-zA-Z0-9_-]{28,})/;
             const match = url.match(regex);
             
             if (match && match[1]) {
@@ -170,10 +172,10 @@
             let url = linkInput.value.trim();
             if (!url) {
                 // If input is empty, show placeholder and clear error
-                mediaWrapper.innerHTML = '';
+                mediaWrapper.innerHTML = ''; // Clear previous media
                 placeholderText.style.display = 'block';
-                mediaWrapper.appendChild(placeholderText);
-                mediaWrapper.classList.remove('aspect-[4/5]', 'aspect-[9/16]');
+                mediaWrapper.appendChild(placeholderText); // Add placeholder back
+                mediaWrapper.classList.remove('aspect-[1/1]', 'aspect-[4/5]', 'aspect-[9/16]');
                 errorMsg.textContent = '';
                 return;
             }
@@ -187,7 +189,7 @@
             errorMsg.textContent = '';
             
             // Apply the currently selected aspect ratio
-            mediaWrapper.classList.remove('aspect-[4/5]', 'aspect-[9/16]');
+            mediaWrapper.classList.remove('aspect-[1/1]', 'aspect-[4/5]', 'aspect-[9/16]');
             mediaWrapper.classList.add(currentAspectRatio);
 
             // Determine if it's an image or video
@@ -201,6 +203,7 @@
                 errorMsg.textContent = 'Error loading media. Check link or permissions.';
                 placeholderText.style.display = 'block'; // Show placeholder
                 mediaWrapper.appendChild(placeholderText);
+Next, I'll add the "Load New Concept" dropdown and the "Logo URL" input.
             };
 
             if (isImage || (url.includes('drive.google.com') && !isVideo)) {
@@ -232,6 +235,13 @@
 
         // --- Event Listeners ---
 
+        // Handle 1:1 button click
+        btn1to1.addEventListener('click', () => {
+            currentAspectRatio = 'aspect-[1/1]';
+            updateActiveButton(btn1to1);
+            generatePreview(); // Re-generate preview with new aspect ratio
+        });
+
         // Handle 4:5 button click
         btn4to5.addEventListener('click', () => {
             currentAspectRatio = 'aspect-[4/5]';
@@ -250,7 +260,7 @@
         linkInput.addEventListener('input', generatePreview);
 
         // Set initial button state on load
-        updateActiveButton(btn4to5);
+        updateActiveButton(btn1to1);
     </script>
 
 </body>
