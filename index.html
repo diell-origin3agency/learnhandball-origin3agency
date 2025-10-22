@@ -108,26 +108,23 @@
                         
                         <!-- Ad Content -->
                         <div class="absolute inset-0 p-6 flex flex-col justify-between text-white">
-                            <!-- === STATIC LOGO PLACEHOLDER (TOP LEFT) === -->
-                            <div class="flex-shrink-0">
-                                <div class="h-8 md:h-10 w-auto bg-white p-1 rounded-sm inline-block">
-                                    <img src="https://placehold.co/150x40/ffffff/000000?text=LOGO" alt="Logo Placeholder" class="h-full w-auto">
-                                </div>
+                            
+                            <!-- Empty top section for spacing -->
+                            <div></div>
+                            
+                            <!-- Text Content (Left-aligned) -->
+                            <div class="w-full p-4">
+                                <h1 id="previewHeadline" class="text-3xl md:text-4xl font-bold leading-tight shadow-text text-left" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.7);"></h1>
+                                <div id="previewBullets" class="text-lg md:text-xl mt-4 font-medium leading-normal whitespace-pre-line shadow-text text-left" style="text-shadow: 1px 1px 6px rgba(0,0,0,0.8);"></div>
                             </div>
                             
-                            <!-- Text Content (centered) -->
-                            <div class="flex-grow flex flex-col items-center justify-center text-center p-4">
-                                <h1 id="previewHeadline" class="text-3xl md:text-5xl font-bold leading-tight shadow-text" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.7);"></h1>
-                                <div id="previewBullets" class="text-lg md:text-2xl mt-4 font-medium leading-normal whitespace-pre-line shadow-text" style="text-shadow: 1px 1px 6px rgba(0,0,0,0.8);"></div>
-                            </div>
-                            
-                            <!-- === STATIC LOGO PLACEHOLDER (BOTTOM LEFT) === -->
-                            <!-- This is a placeholder matching your screenshot. -->
-                            <img src="https://placehold.co/200x50/ffffff/000000?text=LEARN+HANDBALL+LOGO" alt="Logo Placeholder" class="absolute bottom-24 left-6 w-32 h-auto opacity-80">
+                            <!-- Bottom Section (Logo + CTA) -->
+                            <div class="w-full">
+                                <!-- STATIC LOGO PLACEHOLDER (BOTTOM LEFT) -->
+                                <img src="https://placehold.co/200x50/ffffff/000000?text=LEARN+HANDBALL+LOGO" alt="Logo Placeholder" class="w-28 h-auto opacity-80 mb-3">
 
-                            <!-- CTA Button -->
-                            <div class="flex-shrink-0 w-full">
-                                <div id="previewCta" class="bg-white text-gray-900 font-bold text-lg md:text-2xl text-center p-3 md:p-4 rounded-md w-full max-w-md mx-auto shadow-lg">
+                                <!-- CTA Button -->
+                                <div id="previewCta" class="bg-white text-gray-900 font-bold text-base md:text-lg text-center p-3 rounded-md w-full shadow-lg">
                                 </div>
                             </div>
                         </div>
@@ -172,7 +169,7 @@
                 imageUrl: "https://placehold.co/1080x1350/DDE5ED/1D3A59?text=App+Planning+Interface+(4:5)",
                 headline: "Your entire season, planned in 10 minutes.",
                 bullets: "• 700+ video exercises\n• Ready-made training plans\n• Stop searching, start coaching",
-                cta: "Try free for 14 days"
+                cta: "Try free for 1D days"
             },
             {
                 name: "The 'Emotional Payoff'",
